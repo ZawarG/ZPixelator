@@ -1,0 +1,89 @@
+/* Variables */
+:root {
+    --searchBg: #ffffff;
+    --fg: #000000;
+    --fontFamily: 'Roboto Mono', monospace;
+    --time: 10s;
+}
+
+/* Base styles */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    background: var(--searchBg);
+    font-family: var(--fontFamily);
+}
+
+h1 {
+    color: #333;
+    font-size: 1.8em;
+}
+
+h2 {
+    color: #555;
+    font-size: 1.3em;
+}
+
+p {
+    color: #444;
+    line-height: 1.5;
+}
+
+/* Page */
+.container {
+    display:flex;
+    align-items:center;
+    flex-direction:column;
+}
+
+.split {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    max-width:100%;
+}
+
+.column {
+    align-items:center;
+    justify-content:center;
+    width:20em;
+    height:20em;
+    max-width: 33%;
+}
+
+.column form {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:5em;
+    max-width:100%;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.input-row label {
+    font-size: 0.7em;
+    color: #444;
+}
+
+.input-row input {
+    width: 2em;
+    padding: 0.3em;
+}
+
+.imgcolumn {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    border:2px solid black;
+    width:20em;
+    height:20em;
+    max-width: 33%;
+}
