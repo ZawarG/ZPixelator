@@ -45,19 +45,13 @@ p {
 }
 
 .column {
+    display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
     width:20em;
     height:20em;
     max-width: 33%;
-}
-
-.column form {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin:5em;
-    max-width:100%;
 }
 
 .input-row {
