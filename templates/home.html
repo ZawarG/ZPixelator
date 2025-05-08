@@ -20,11 +20,16 @@
 
             <!-- column one: image input -->
             <div class="imgcolumn">
-                <h2>Upload Image</h2>
-                <!-- <form action="/" method="POST" enctype="multipart/form-data"> -->
-                <input type="file" name="image" accept=".jpg, .jpeg, .png" required>
-                <!-- <button type="submit">Upload file</button>
-                </form> -->
+                <h2>Original Image</h2>
+                {% if original_url %}
+                <img class="pixelated_img" src="{{ original_url }}" alt="Original Image" />
+                {% else %}
+                <div class="placeholder-box"></div>
+                {% endif %}
+                
+                <div class="upload-controls">
+                    <input type="file" name="image" accept=".jpg, .jpeg, .png" required>
+                </div>
             </div>
 
             <!-- column two: number of pixels input and button -->
@@ -45,7 +50,6 @@
                 <img class ="pixelated_img" src="{{ url_for('static', filename=img_url) }}" alt="Converted Image" />
                 {% endif %}
             </div>
-
         </div>
         </form>
     </div>
