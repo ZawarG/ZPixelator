@@ -22,20 +22,26 @@ dragDropArea.addEventListener('dragleave', function () {
 // when item is dropped
 dragDropArea.addEventListener('drop', function (event) {
     event.preventDefault();
+    dragDropArea.classList.remove('drag-over');
 
-    // update formatting of page
-    reformat()
-
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/JPEG', 'image/JPG', 'image/PNG'];
     // retrieve dropped file
     const files = event.dataTransfer.files;
-
+    
     if (files.length > 0) {
-        handleFileUpload(files[0]);
+        // check for valid file types
+        if (validTypes.includes(files[0].type.toLowerCase())) {
+            // update formatting of page
+            reformat()
+
+            handleFileUpload(files[0]);
+        } else {
+            alert('Please upload an image.');
+        }
     }
 });
 
 function reformat() {
-    dragDropArea.classList.remove('drag-over');
     dragDropArea.classList.remove('noimage');
     const element = document.getElementById('moving');
     const target = document.getElementById('moveto');
