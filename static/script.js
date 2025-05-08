@@ -44,8 +44,13 @@ dragDropArea.addEventListener('drop', function (event) {
 function reformat() {
     dragDropArea.classList.remove('noimage');
     const element = document.getElementById('moving');
-    const target = document.getElementById('moveto');
-    target.appendChild(element);
+    if (element) {
+        const target = document.getElementById('moveto');
+        console.log(element, target)
+        target.appendChild(element);
+    }
+        
+
 }
 
 // handle file upload and display preview of image
