@@ -126,10 +126,10 @@ def pastetoimg(canvaspath,name,dir):
                 #print((pos[1]*size[0],pos[0]*size[1]), 'positions')
                 bg.paste(fg, (pos[1]*size[0],pos[0]*size[1]))
 
-    print('__________________',str(pathlib.Path(__file__).parent.resolve())+'/static/photos/'+name)
+    print('__________________',str(pathlib.Path(__file__).parent.resolve()/ 'static' / 'photos' / name))
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     
-    bg.save(str(pathlib.Path(__file__).parent.resolve())+'\\static\\photos\\'+name)
+    bg.save(str(pathlib.Path(__file__).parent.resolve()/ 'static' / 'photos' / name))
     print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
 def imgtopxl(imgpath,pixels,name):

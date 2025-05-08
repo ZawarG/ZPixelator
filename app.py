@@ -30,12 +30,6 @@ def home():
             if ext.lower() == '.jpeg':
                 ext = '.jpg'
 
-            """# get image path
-            initial_img = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
-            img_path = initial_img.name
-            initial_img.close()
-
-            """
             # save image to retrieved path
             try:
                 img_path = os.path.join('static','photos',filename)
@@ -50,6 +44,8 @@ def home():
             output_filename = 'pixelated_' + filename
             print(filename)
             converter.imgtopxl(img_path, int(pixel_amnt), output_filename)
+
+            return render_template('home.html', original_url = img_path, img_url=os.path.join('static','photos',output_filename))
 
         except Exception as e:
             return f"Error processing image: {str(e)}", 500
