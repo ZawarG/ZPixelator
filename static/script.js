@@ -65,9 +65,6 @@ function handleFileUpload(file) {
 
         // show uploadedImage on website
         uploadedImage.style.display = 'block';
-        // if (placeholderBox !== null) {
-        //     placeholderBox.style.display = 'none';
-        // }
 
         // simulate file input for form submission
         const dataTransfer = new DataTransfer();
@@ -80,14 +77,14 @@ function handleFileUpload(file) {
 
 // trigger form submission only if file is selected
 form.addEventListener('submit', function(event) {
-    console.log("form submission triggered")
-    // no file selected, prevent form submission and promot user to select image
-    console.log(fileInput.files.length);
+    // no file selected, prevent form submission and prompt user to select image
     if (fileInput.files.length === 0) {
         event.preventDefault();
         alert("Please select a file before submitting.");
         fileInput.click();
     } else {
-        console.log("File selected, proceeding with form submission.");
+        const image = document.getElementById("pixelated-img")
+        image.src = '/static/hourglass.gif'
+        image.style.display = 'block'
     }
 });

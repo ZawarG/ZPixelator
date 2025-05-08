@@ -127,9 +127,9 @@ p {
 /* image display to fit in box */
 .pixelated_img {
     position:absolute;
-    object-fit: contain;
-    max-height: 100%;
-    max-width: 100%;
+    object-fit:contain;
+    max-height:100%;
+    max-width:100%;
     display:block;
     overflow:hidden;
     border-radius:10px;
