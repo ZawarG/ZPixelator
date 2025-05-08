@@ -5,6 +5,18 @@ import os
 import pathlib
 from image_slicer import slice, calc_columns_rows
 
+def clear_prev_images():
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory where this script lives
+    photo_dir = os.path.join(base_dir, 'static', 'photos')
+
+    for subdir, dirs, files in os.walk(photo_dir):
+        for filename in files:
+            filepath = os.path.join(subdir, filename)
+            try:
+                os.remove(filepath)
+            except Exception as e:
+                print(f"Failed to delete {filepath}: {e}")
+
 
 def Create_dir():
     #create temporary directory for movement of files
@@ -61,13 +73,13 @@ def findpos(path):
     filename = Path(path).stem
     position = (filename).split('_')
 
-    print(position, "positionnnn")
-    print(position[-2], position[-1])
+    #print(position, "positionnnn")
+    #print(position[-2], position[-1])
 
     
     position = (int(position[-2])-1, int(position[-1])-1)
 
-    print('image', position, 'placed at: ')
+    #print('image', position, 'placed at: ')
     return position
 
 
@@ -111,11 +123,14 @@ def pastetoimg(canvaspath,name,dir):
                 fg = Image.open(filepath)
                 pos = findpos(filepath)
                 size = imgsize(filepath)
-                print((pos[1]*size[0],pos[0]*size[1]), 'positions')
+                #print((pos[1]*size[0],pos[0]*size[1]), 'positions')
                 bg.paste(fg, (pos[1]*size[0],pos[0]*size[1]))
 
     print('__________________',str(pathlib.Path(__file__).parent.resolve())+'/static/photos/'+name)
-    bg.save(str(pathlib.Path(__file__).parent.resolve())+'/static/photos/'+name)
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    
+    bg.save(str(pathlib.Path(__file__).parent.resolve())+'\\static\\photos\\'+name)
+    print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
 def imgtopxl(imgpath,pixels,name):
     #master function
