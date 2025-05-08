@@ -19,40 +19,68 @@
         <div class="split">
 
             <!-- column one: image input -->
-            <div class="imgcolumn">
-                <h2>Original Image</h2>
+            <div class="imgcontainer">
+                <!-- if image is displayed -->
                 {% if original_url %}
-                <img class="pixelated_img" src="{{ original_url }}" alt="Original Image" />
+                    <div class="imgcolumn" id="drag-drop-area">
+                        <img class="pixelated_img" src="{{ original_url }}" alt="Original Image" id="uploaded-img"/>
+                    </div>
+                    <div class="upload-controls outside">
+                        <label for="file-upload" class="custom-upload-button">Browse Files</label>
+                        <input 
+                            id="file-upload" 
+                            type="file" 
+                            name="image" 
+                            accept=".jpg, .jpeg, .png" 
+                            style="display:none;"
+                            onchange="handleFileUpload(this.files[0])"
+                        >
+                    </div>
+                <!-- if image is not displayed -->
                 {% else %}
-                <div class="placeholder-box"></div>
+                    <div class="imgcolumn" id="drag-drop-area">
+                        <div class="placeholder-box" id="placeholder-box">
+                            <h2>Drag and Drop to Upload Image</h2>
+                            <p>OR</p>
+                            <div class="upload-controls">
+                                <label for="file-upload" class="custom-upload-button">Browse Files</label>
+                                <input 
+                                    id="file-upload" 
+                                    type="file" 
+                                    name="image" 
+                                    accept=".jpg, .jpeg, .png" 
+                                    style="display:none;"
+                                    onchange="handleFileUpload(this.files[0])"
+                                >
+                            </div>
+                        </div>
+                        <img class="pixelated_img" id="uploaded-img" style="display:none;"/>
+                    </div>
                 {% endif %}
-                
-                <div class="upload-controls">
-                    <input type="file" name="image" accept=".jpg, .jpeg, .png" required>
-                </div>
             </div>
 
             <!-- column two: number of pixels input and button -->
             <div class="column">
-                <!-- <form action="/" method="POST"> -->
                 <div class="input-row">
                     <label for="search-field">Number of pixels:</label>
                     <input id="search-field" type="text" name="pixel-amnt" placeholder="" autofocus required />
                 </div>
-                <button type="submit">Convert</button>
-                <!-- </form> -->
+                <button id="submit-button" type="submit">Convert</button>
             </div>
 
             <!-- column three: image output -->
-            <div class="imgcolumn">
-                <!-- display the image if a url exists, i.e. after conversion -->
-                {% if img_url %}
-                <img class="pixelated_img" src="{{ img_url }}" alt="Converted Image" />
-                {% endif %}
+            <div class="imgcontainer">
+                <div class="imgcolumn">
+                    <!-- display the image if a url exists, i.e. after conversion -->
+                    {% if img_url %}
+                    <img class="pixelated_img" src="{{ img_url }}" alt="Converted Image" />
+                    {% endif %}
+                </div>
             </div>
         </div>
         </form>
     </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>
