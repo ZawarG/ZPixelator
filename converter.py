@@ -114,8 +114,8 @@ def pastetoimg(canvaspath,name,dir):
                 print((pos[1]*size[0],pos[0]*size[1]), 'positions')
                 bg.paste(fg, (pos[1]*size[0],pos[0]*size[1]))
 
-    print('__________________',str(pathlib.Path(__file__).parent.resolve())+'/'+name+'.jpg')
-    bg.save(str(pathlib.Path(__file__).parent.resolve())+'/'+name+'.jpg')
+    print('__________________',str(pathlib.Path(__file__).parent.resolve())+'/static/photos/'+name)
+    bg.save(str(pathlib.Path(__file__).parent.resolve())+'/static/photos/'+name)
 
 def imgtopxl(imgpath,pixels,name):
     #master function
@@ -169,6 +169,4 @@ def imgtopxl(imgpath,pixels,name):
 
     os.remove('canvas.jpg')
 
-    print('photo has been successfully pixelfied, please check folder for', name+'.jpg')
-
-final_img = imgtopxl("conceptart.png", 100, "conceptart")
+    print('photo has been successfully pixelfied, please check folder for', name)

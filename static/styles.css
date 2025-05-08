@@ -81,3 +81,9 @@ p {
     height:20em;
     max-width: 33%;
 }
+
+.pixelated_img {
+    object-fit: contain;
+    max-height: 100%;
+    max-width: 100%;
+}

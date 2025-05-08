@@ -42,7 +42,7 @@
             <div class="imgcolumn">
                 <!-- display the image if a url exists, i.e. after conversion -->
                 {% if img_url %}
-                <img src="{{ img_url }}" alt="Converted Image" />
+                <img class ="pixelated_img" src="{{ url_for('static', filename=img_url) }}" alt="Converted Image" />
                 {% endif %}
             </div>
 
