@@ -45,7 +45,7 @@ def home():
             print(filename)
             converter.imgtopxl(img_path, int(pixel_amnt), output_filename)
 
-            return render_template('home.html', original_url = img_path, img_url=os.path.join('static','photos',output_filename))
+            return render_template('home.html', original_url = '/static/photos/' + filename ,img_url = '/static/photos/' + output_filename)
 
         except Exception as e:
             return f"Error processing image: {str(e)}", 500
