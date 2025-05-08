@@ -44,7 +44,9 @@ function handleFileUpload(file) {
 
         // show uploadedImage on website
         uploadedImage.style.display = 'block';
-        placeholderBox.style.display = 'none';
+        if (placeholderBox !== null) {
+            placeholderBox.style.display = 'none';
+        }
 
         // simulate file input for form submission
         const dataTransfer = new DataTransfer();
