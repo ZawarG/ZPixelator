@@ -24,6 +24,10 @@ def home():
             filename = secure_filename(file.filename)
             _, ext = os.path.splitext(filename)
 
+            # if neccessary, normalize jpeg to jpg
+            if ext.lower() == '.jpeg':
+                ext = '.jpg'
+
             # get image path
             initial_img = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
             img_path = initial_img.name
@@ -36,7 +40,7 @@ def home():
             final_img = converter.imgtopxl(img_path, int(pixel_amnt), filename)
 
             # delete temp file
-            os.remove(tmp_path)
+            os.remove(img_path)
 
             return render_template('home.html', img_url = final_img)
 
