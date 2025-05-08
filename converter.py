@@ -54,15 +54,20 @@ def imgsize(path):
 
 def AverageColor(path):
     #find the average color of an image in form of RBG list
-    im = Image.open(path).convert('RGB')
-    # im = Image.open(path, 'r')
-    pix_val_R = list(im.getdata(0))
-    pix_val_G = list(im.getdata(1))
-    pix_val_B = list(im.getdata(2))
+    im = Image.open(path).convert('RGBA')
+
+    pixels = list(im.getdata())
+    opacity_check = [px for px in pixels if px[3] > 0]
     
-    avr_R = round(sum(pix_val_R)/len(pix_val_R))
-    avr_G = round(sum(pix_val_G)/len(pix_val_G))
-    avr_B = round(sum(pix_val_B)/len(pix_val_B))
+    #if transparent background return white
+    if not opacity_check:
+        return(255,255,255) 
+
+    num_pixels = len(pixels)
+    
+    avr_R = round(sum(px[0] for px in opacity_check)/num_pixels)
+    avr_G = round(sum(px[1] for px in opacity_check)/num_pixels)
+    avr_B = round(sum(px[2] for px in opacity_check)/num_pixels)
     
     average = (avr_R,avr_G,avr_B)
     return average
@@ -136,8 +141,6 @@ def imgtopxl(imgpath,pixels,name):
     #master function
 
     filename = Path(imgpath).name
-    print(filename)
-    print(imgpath)
     try:
         global tmpdir_path 
         tmpdir_path = img_to_dir(imgpath)
