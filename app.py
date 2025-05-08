@@ -53,5 +53,10 @@ def home():
     # no conversion (default)
     return render_template('home.html', original_url = None, img_url=None)
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 if __name__ == '__main__':
     app.run(debug=False)

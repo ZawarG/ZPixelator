@@ -3,7 +3,7 @@ const fileInput = document.getElementById('file-upload');
 const uploadedImage = document.getElementById('uploaded-img');
 const submitButton = document.getElementById('submit-button');
 const form = document.querySelector('form');
-const placeholderBox = document.getElementById('placeholder-box');
+// const placeholderBox = document.getElementById('placeholder-box');
 
 // when something is dragged over drag-drop-area
 dragDropArea.addEventListener('dragover', function (event) {
@@ -44,9 +44,9 @@ function handleFileUpload(file) {
 
         // show uploadedImage on website
         uploadedImage.style.display = 'block';
-        if (placeholderBox !== null) {
-            placeholderBox.style.display = 'none';
-        }
+        // if (placeholderBox !== null) {
+        //     placeholderBox.style.display = 'none';
+        // }
 
         // simulate file input for form submission
         const dataTransfer = new DataTransfer();

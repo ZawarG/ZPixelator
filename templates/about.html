@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About This Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <!-- page content -->
+    <div class="container">
+        <!-- title -->
+        <h1>About This Project</h1>
+
+        <!-- about the contributors -->
+        <h2>Contributors</h2>
+
+        <div class="card">
+            <!-- zawar -->
+            <div class="contributor">
+                <h4>Zawar Gondal</h4>
+                <a href="https://github.com/zawarg" target="_blank">GitHub</a>
+            </div>
+            <!-- aasees -->
+            <div class="contributor">
+                <h4>Aasees Badesha</h4>
+                <a href="https://github.com/aaseesb" target="_blank">GitHub</a>
+            </div>
+        </div>
+
+        <!-- about the project -->
+        <h2>Project Description</h2>
+        <p>
+            Pixelator is a web application that allows users to upload an image and pixelate it by specifying the number of pixels they want.
+            This application is built using Flask for the backend, and HTMl, CSS, and JavaScript for the frontend.
+        </p>
+
+        <h2>Thank You!</h2>
+
+
+        <!-- back button -->
+        <div class="back-container">
+            <a href="/" class="back-button">⬅</a>
+        </div>
+    </div>
+</body>
+
+</html>

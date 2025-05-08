@@ -34,7 +34,7 @@
                             accept=".jpg, .jpeg, .png" 
                             style="display:none;"
                             onchange="handleFileUpload(this.files[0])"
-                        >
+                        />
                     </div>
                 <!-- if image is not displayed -->
                 {% else %}
@@ -42,19 +42,20 @@
                         <div class="placeholder-box" id="placeholder-box">
                             <h2>Drag and Drop to Upload Image</h2>
                             <p>OR</p>
-                            <div class="upload-controls">
-                                <label for="file-upload" class="custom-upload-button">Browse Files</label>
-                                <input 
-                                    id="file-upload" 
-                                    type="file" 
-                                    name="image" 
-                                    accept=".jpg, .jpeg, .png" 
-                                    style="display:none;"
-                                    onchange="handleFileUpload(this.files[0])"
-                                >
-                            </div>
+                            
                         </div>
                         <img class="pixelated_img" id="uploaded-img" style="display:none;"/>
+                        <div class="upload-controls">
+                            <label for="file-upload" class="custom-upload-button">Browse Files</label>
+                            <input 
+                                id="file-upload" 
+                                type="file" 
+                                name="image" 
+                                accept=".jpg, .jpeg, .png" 
+                                style="display:none;"
+                                onchange="handleFileUpload(this.files[0])"
+                            />
+                        </div>
                     </div>
                 {% endif %}
             </div>
@@ -80,6 +81,12 @@
         </div>
         </form>
     </div>
+
+    <!-- about section -->
+    <div id="about">
+        <a href="{{ url_for('about') }}">About this project :O</a>
+    </div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
