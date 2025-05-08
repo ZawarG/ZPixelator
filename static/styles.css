@@ -101,14 +101,16 @@ p {
     height:100%;
     overflow:hidden;
     transition: border-color 0.3s ease, background-color 0.3s ease;
-    border:2px solid black;
     border-radius:10px;
     position:relative;
 }
 
+.imgcolumn.noimage {
+    border:2px solid black;
+}
+
 .placeholder-box {
     margin:1em;
-    z-index:1;
     position:relative;
 }
 
@@ -116,6 +118,10 @@ p {
 .imgcolumn.drag-over {
     border: 1px dashed #0077cc;
     background-color: #f4f7fb;
+}
+/* drag and drop */
+.imgcolumn.noimage.dragged-in {
+    border: none;
 }
 
 /* image display to fit in box */
@@ -126,7 +132,6 @@ p {
     max-width: 100%;
     display:block;
     overflow:hidden;
-    z-index:2;
     border-radius:10px;
 }
 
@@ -150,13 +155,12 @@ input[type="file"] {
     background-color: #0056b3;
 }
 
-.upload-controls {
+.upload-controls.noimage {
     display: block;
     position:relative;
-    z-index:3;
 }
 
-.upload-controls.outside {
+.upload-controls {
     position:absolute;
     bottom:-3em;
 }

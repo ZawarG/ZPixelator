@@ -22,7 +22,9 @@ dragDropArea.addEventListener('dragleave', function () {
 // when item is dropped
 dragDropArea.addEventListener('drop', function (event) {
     event.preventDefault();
-    dragDropArea.classList.remove('drag-over');
+
+    // update formatting of page
+    reformat()
 
     // retrieve dropped file
     const files = event.dataTransfer.files;
@@ -31,6 +33,14 @@ dragDropArea.addEventListener('drop', function (event) {
         handleFileUpload(files[0]);
     }
 });
+
+function reformat() {
+    dragDropArea.classList.remove('drag-over');
+    dragDropArea.classList.remove('noimage');
+    const element = document.getElementById('moving');
+    const target = document.getElementById('moveto');
+    target.appendChild(element);
+}
 
 // handle file upload and display preview of image
 function handleFileUpload(file) {
