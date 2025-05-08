@@ -35,6 +35,10 @@ p {
     display:flex;
     align-items:center;
     flex-direction:column;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto; 
+    padding: 20px;
 }
 
 .split {
@@ -183,4 +187,26 @@ input[type="file"] {
     display: flex;
     flex-direction: column;
     text-align: center;
+}
+
+.card {
+    width: 100%;
+    max-height: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.back-container {
+    text-align: center;
+}
+
+.back-button {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: black;
+    font-size: 1.5em;
 }
