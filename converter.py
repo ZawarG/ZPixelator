@@ -1,14 +1,21 @@
 from PIL import Image
-from pathlib import Path    
+from pathlib import Path
 import shutil
 import os
+import math
 import pathlib
-from image_slicer import slice, calc_columns_rows
+
+def calc_columns_rows(n):
+    #Calculate number of columns and rows to make a grid of n parts as square as possible
+    cols = int(math.sqrt(n))
+    while n % cols != 0:
+        cols -= 1
+    rows = n // cols
+    return (cols, rows)
 
 def clear_prev_images():
-    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory where this script lives
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     photo_dir = os.path.join(base_dir, 'static', 'photos')
-
     for subdir, dirs, files in os.walk(photo_dir):
         for filename in files:
             filepath = os.path.join(subdir, filename)
@@ -17,174 +24,149 @@ def clear_prev_images():
             except Exception as e:
                 print(f"Failed to delete {filepath}: {e}")
 
-
 def Create_dir():
-    #create temporary directory for movement of files
     path = os.path.join(os.getcwd(), "tmp")
     try:
         os.mkdir(path)
-        print("Directory %s succesfully created" % path)
-        return(path)
     except OSError:
-        print("Creation of the directory %s failed" % path)
-        return(path)
-
+        pass
+    return path
 
 def img_to_dir(imgpath):
-    #copy image to direcotry
     dirpath = Create_dir()
     try:
-        shutil.copy(imgpath,dirpath)
-        print("file succesfully copied to /tmp/")
+        shutil.copy(imgpath, dirpath)
         return dirpath
-    except:
-        print("encountered error while copying file")
+    except Exception as e:
+        print(f"Error copying file: {e}")
 
+def accurate_slice(image_path, total_parts):
+    image = Image.open(image_path)
+    width, height = image.size
+    cols, rows = calc_columns_rows(total_parts)
 
-def splitimage(path,parts):
-    #split image using image_slice module
-    slice(path, parts)
+    slice_width = width // cols
+    slice_height = height // rows
 
+    remaining_width = width % cols
+    remaining_height = height % rows
+
+    for row in range(rows):
+        for col in range(cols):
+            left = col * slice_width
+            upper = row * slice_height
+            right = left + slice_width
+            lower = upper + slice_height
+
+            if col == cols - 1:
+                right = width
+            if row == rows - 1:
+                lower = height
+
+            box = (left, upper, right, lower)
+            slice_img = image.crop(box)
+            filename = f"{row+1}_{col+1}.png"
+            slice_img.save(os.path.join(tmpdir_path, filename))
 
 def imgsize(path):
-    #find size of an image
-    im = Image.open(path)
-    return(im.size)
-
+    return Image.open(path).size
 
 def AverageColor(path):
-    #find the average color of an image in form of RBG list
     im = Image.open(path).convert('RGBA')
-
     pixels = list(im.getdata())
-    opacity_check = [px for px in pixels if px[3] > 0]
-    
-    #if transparent background return white
-    if not opacity_check:
-        return(255,255,255) 
+    visible = [px for px in pixels if px[3] > 0]
 
-    num_pixels = len(pixels)
-    
-    avr_R = round(sum(px[0] for px in opacity_check)/num_pixels)
-    avr_G = round(sum(px[1] for px in opacity_check)/num_pixels)
-    avr_B = round(sum(px[2] for px in opacity_check)/num_pixels)
-    
-    average = (avr_R,avr_G,avr_B)
-    return average
+    if not visible:
+        return (255, 255, 255)
 
+    num = len(visible)
+    r = round(sum(px[0] for px in visible) / num)
+    g = round(sum(px[1] for px in visible) / num)
+    b = round(sum(px[2] for px in visible) / num)
+    return (r, g, b)
 
 def findpos(path):
-    # find position from name of image
-    filename = Path(path).stem
-    position = (filename).split('_')
-
-    #print(position, "positionnnn")
-    #print(position[-2], position[-1])
-
-    
-    position = (int(position[-2])-1, int(position[-1])-1)
-
-    #print('image', position, 'placed at: ')
-    return position
-
+    parts = Path(path).stem.split('_')
+    return int(parts[0]) - 1, int(parts[1]) - 1
 
 def imgtosolid(path):
-    #change the color of sliced image to its average color
-    for subdir, dirs, files in os.walk(path):
-        original_files = list(files)
-
+    for subdir, _, files in os.walk(path):
         for filename in files:
-            filepath = subdir + os.sep + filename
-            
-            if filepath.endswith(".jpg") or filepath.endswith(".png"):
-                image = Image.new('RGB',imgsize(filepath),AverageColor(filepath))
-                string = str(filename).split('_')
-
-                # filename = coord1_coord2_.png/.jpg
-                string = str(string[-2]+'_'+string[-1])
-
-                image.save(string)
+            filepath = os.path.join(subdir, filename)
+            if filepath.endswith((".png", ".jpg")):
+                size = imgsize(filepath)
+                color = AverageColor(filepath)
+                new_img = Image.new("RGB", size, color)
+                name = Path(filename).name
+                temp_path = os.path.join(tmpdir_path, name)
                 os.remove(filepath)
-                shutil.move(string,tmpdir_path)
-
-
+                new_img.save(temp_path)
+    
 def createcanvas(pixels):
-    #create a canvas onwhich other images will be pasted
-    #this function first gets the size of a sliced image then multiplies by the total vertical and horizontal parts to create size
-    col_rows = calc_columns_rows(pixels)
-    size_single = imgsize(tmpdir_path+'/01_01.png')
-    print((col_rows[0]*size_single[0],col_rows[1]*size_single[1]))
-    img = Image.new('RGB', (col_rows[0]*size_single[0],col_rows[1]*size_single[1]), color = 'white',)
-    img.save('canvas.jpg')
+    cols, rows = calc_columns_rows(pixels)
 
-def pastetoimg(canvaspath,name,dir):
-    #paste image onto canvas
+    # Read dimensions dynamically
+    widths = []
+    heights = []
+
+    for row in range(rows):
+        row_heights = []
+        for col in range(cols):
+            img_path = os.path.join(tmpdir_path, f"{row+1}_{col+1}.png")
+            if os.path.exists(img_path):
+                w, h = imgsize(img_path)
+                if col == 0:
+                    heights.append(h)
+                if row == 0:
+                    widths.append(w)
+
+    canvas_width = sum(widths)
+    canvas_height = sum(heights)
+
+    canvas = Image.new("RGB", (canvas_width, canvas_height), color="white")
+    canvas.save("canvas.jpg")
+
+def pastetoimg(canvaspath, name, dir):
     bg = Image.open(canvaspath)
-    for subdir, dirs, files in os.walk(dir):
+    for subdir, _, files in os.walk(dir):
         for filename in files:
-            filepath = subdir + os.sep + filename
-
-            if filepath.endswith(".jpg") or filepath.endswith(".png"):
+            filepath = os.path.join(subdir, filename)
+            if filepath.endswith((".png", ".jpg")):
                 fg = Image.open(filepath)
                 pos = findpos(filepath)
                 size = imgsize(filepath)
-                #print((pos[1]*size[0],pos[0]*size[1]), 'positions')
-                bg.paste(fg, (pos[1]*size[0],pos[0]*size[1]))
+                x = sum(imgsize(os.path.join(dir, f"{pos[0]+1}_{i+1}.png"))[0] for i in range(pos[1]))
+                y = sum(imgsize(os.path.join(dir, f"{j+1}_{pos[1]+1}.png"))[1] for j in range(pos[0]))
+                bg.paste(fg, (x, y))
+    save_path = str(pathlib.Path(__file__).parent.resolve() / 'static' / 'photos' / name)
+    bg.save(save_path)
 
-    print('__________________',str(pathlib.Path(__file__).parent.resolve()/ 'static' / 'photos' / name))
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    
-    bg.save(str(pathlib.Path(__file__).parent.resolve()/ 'static' / 'photos' / name))
-    print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
-def imgtopxl(imgpath,pixels,name):
-    #master function
-
+def imgtopxl(imgpath, pixels, name):
     filename = Path(imgpath).name
     try:
-        global tmpdir_path 
+        global tmpdir_path
         tmpdir_path = img_to_dir(imgpath)
-        tmp_img_path = tmpdir_path +"/"+ filename
-        print(tmp_img_path)
+        tmp_img_path = os.path.join(tmpdir_path, filename)
     except FileNotFoundError:
-        print('No such directory or file exists')
+        print('File not found.')
+        return
 
     try:
-        slice(tmp_img_path, pixels)
-        print(filename,'successfully split into',pixels,'pixel parts')
-        print(tmp_img_path)
+        accurate_slice(tmp_img_path, pixels)
+        os.remove(tmp_img_path)
     except Exception as e:
-        print('error occurred while slicing image')
-        print(tmp_img_path)
-        
+        print(f"Error slicing: {e}")
+        return
 
-    os.remove(tmp_img_path)
-    print(tmpdir_path)
-    try:
-        imgtosolid(tmpdir_path)
-    except Exception as e:
-        print(e, 'exception')
-    
+    imgtosolid(tmpdir_path)
     createcanvas(pixels)
+    pastetoimg("canvas.jpg", name, tmpdir_path)
 
-    pastetoimg('canvas.jpg', name, tmpdir_path)
-    print('deleting residual files...')
-
-    
     try:
-        os.remove(tmpdir_path)
-    except PermissionError:
-        print('device refused to permit deleteing of /temp, manually deleting...')
-        for subdir, dirs, files in os.walk(tmpdir_path):
-            for filename in files:
-                filepath = subdir + os.sep + filename
-                os.remove(filepath)
-        try:
-            os.rmdir(tmpdir_path)
-            print("manual removal successful")
-        except:
-            print("manual removal failed, please remove /temp folder from folder containing this file")
+        shutil.rmtree(tmpdir_path)
+    except Exception as e:
+        print(f"Could not remove tmp directory: {e}")
 
-    os.remove('canvas.jpg')
-
-    print('photo has been successfully pixelfied, please check folder for', name)
+    os.remove("canvas.jpg")
+    print(f"Image saved to: static/photos/{name}")
