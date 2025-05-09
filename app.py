@@ -22,7 +22,6 @@ def home():
         file = request.files.get('image') # retrieve image inputted
         original_url = request.form.get("original_url") # retrieve original url (in case it exists)
 
-        print(original_url, "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
         # ensure file and filename are not empty (a new image was uploaded)
         if (file) and (file.filename !=''):
             # conversion
