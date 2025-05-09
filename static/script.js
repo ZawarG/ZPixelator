@@ -4,6 +4,7 @@ const uploadedImage = document.getElementById('uploaded-img');
 const submitButton = document.getElementById('submit-button');
 const form = document.querySelector('form');
 const originalUrlInput = document.getElementById('original_url');
+const placeholderBox = document.getElementById('placeholder-box');
 
 // when something is dragged over drag-drop-area
 dragDropArea.addEventListener('dragover', function (event) {
@@ -42,14 +43,19 @@ dragDropArea.addEventListener('drop', function (event) {
 });
 
 function reformat() {
+    // remove black border
     dragDropArea.classList.remove('noimage');
+    // remove text (if it exists) saying drag and drop by clearing html content within placeholder div 
+    try {
+        const placeholderBox = document.getElementById('placeholder-box')
+        placeholderBox.innerHTML = ""
+    } catch {}
+    // move upload button to underneath photo
     const element = document.getElementById('moving');
     if (element) {
         const target = document.getElementById('moveto');
-        console.log(element, target)
         target.appendChild(element);
     }
-        
 
 }
 
