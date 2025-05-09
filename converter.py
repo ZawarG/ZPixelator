@@ -31,7 +31,7 @@ def Create_dir():
 
 
 def img_to_dir(imgpath):
-    #copy image to direcotry
+    #copy image to directory
     dirpath = Create_dir()
     try:
         shutil.copy(imgpath,dirpath)

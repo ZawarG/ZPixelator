@@ -3,7 +3,7 @@ const fileInput = document.getElementById('file-upload');
 const uploadedImage = document.getElementById('uploaded-img');
 const submitButton = document.getElementById('submit-button');
 const form = document.querySelector('form');
-// const placeholderBox = document.getElementById('placeholder-box');
+const originalUrlInput = document.getElementById('original_url');
 
 // when something is dragged over drag-drop-area
 dragDropArea.addEventListener('dragover', function (event) {
@@ -70,6 +70,11 @@ function handleFileUpload(file) {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         fileInput.files = dataTransfer.files;
+
+        // clear original image URL since new image has been uploaded
+        if (originalUrlInput) {
+            originalUrlInput.value = "";
+        }
     }
 
     reader.readAsDataURL(file); // read file as data url for image preview
@@ -78,11 +83,12 @@ function handleFileUpload(file) {
 // trigger form submission only if file is selected
 form.addEventListener('submit', function(event) {
     // no file selected, prevent form submission and prompt user to select image
-    if (fileInput.files.length === 0) {
+    if (fileInput.files.length === 0 && originalUrlInput.value === "") {
         event.preventDefault();
         alert("Please select a file before submitting.");
         fileInput.click();
     } else {
+        // loading screen
         const image = document.getElementById("pixelated-img")
         image.src = '/static/hourglass.gif'
         image.style.display = 'block'

@@ -16,35 +16,19 @@
 
         <!-- container to split page into three columns -->
         <form action="/" method="POST" enctype="multipart/form-data">
-        <div class="split">
+            <!-- apply default url value for image, gets submitted if nothing else is -->
+            <input type="hidden" id="original_url" name="original_url" value="{{ original_url }}">
 
-            <!-- column one: image input -->
-            <div class="imgcontainer" id="moveto">
-                <!-- if image is displayed -->
-                {% if original_url %}
-                    <div class="imgcolumn" id="drag-drop-area">
-                        <img class="pixelated_img" src="{{ original_url }}" alt="Original Image" id="uploaded-img"/>
-                    </div>
-                    <div class="upload-controls">
-                        <label for="file-upload" class="custom-upload-button">Browse Files</label>
-                        <input 
-                            id="file-upload" 
-                            type="file" 
-                            name="image" 
-                            accept=".jpg, .jpeg, .png" 
-                            style="display:none;"
-                            onchange="handleFileUpload(this.files[0])"
-                        />
-                    </div>
-                <!-- if image is not displayed -->
-                {% else %}
-                    <div class="imgcolumn {% if not original_url %}noimage{% endif %}" id="drag-drop-area">
-                        <div class="placeholder-box" id="placeholder-box">
-                            <h2>Drag and Drop to Upload Image</h2>
-                            <p>OR</p>
+            <div class="split">
+
+                <!-- column one: image input -->
+                <div class="imgcontainer" id="moveto">
+                    <!-- if image is displayed -->
+                    {% if original_url %}
+                        <div class="imgcolumn" id="drag-drop-area">
+                            <img class="pixelated_img" src="{{ original_url }}" alt="Original Image" id="uploaded-img"/>
                         </div>
-                        <img class="pixelated_img" id="uploaded-img" style="display:none;"/>
-                        <div class="upload-controls.noimage" id="moving">
+                        <div class="upload-controls">
                             <label for="file-upload" class="custom-upload-button">Browse Files</label>
                             <input 
                                 id="file-upload" 
@@ -52,35 +36,54 @@
                                 name="image" 
                                 accept=".jpg, .jpeg, .png" 
                                 style="display:none;"
-                                onchange="reformat();handleFileUpload(this.files[0])"
+                                onchange="handleFileUpload(this.files[0])"
                             />
                         </div>
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- column two: number of pixels input and button -->
-            <div class="column">
-                <div class="input-row">
-                    <label for="search-field">Number of pixels:</label>
-                    <input id="search-field" type="text" name="pixel-amnt" placeholder="" autofocus required />
-                </div>
-                <button id="submit-button" type="submit">Convert</button>
-            </div>
-
-            <!-- column three: image output -->
-            <div class="imgcontainer">
-                <div class="imgcolumn {% if not original_url %}noimage{% endif %}">
-                    <!-- display the image if a url exists, i.e. after conversion -->
-                    {% if img_url %}
-                    <img class="pixelated_img" src="{{ img_url }}" id="pixelated-img"/>
+                    <!-- if image is not displayed -->
                     {% else %}
-                    <img class="pixelated_img" src="{{ url_for('static', filename='hourglass.gif') }}" id="pixelated-img" style="display:none;"/>
+                        <div class="imgcolumn {% if not original_url %}noimage{% endif %}" id="drag-drop-area">
+                            <div class="placeholder-box" id="placeholder-box">
+                                <h2>Drag and Drop to Upload Image</h2>
+                                <p>OR</p>
+                            </div>
+                            <img class="pixelated_img" id="uploaded-img" style="display:none;"/>
+                            <div class="upload-controls.noimage" id="moving">
+                                <label for="file-upload" class="custom-upload-button">Browse Files</label>
+                                <input 
+                                    id="file-upload" 
+                                    type="file" 
+                                    name="image" 
+                                    accept=".jpg, .jpeg, .png" 
+                                    style="display:none;"
+                                    onchange="reformat();handleFileUpload(this.files[0])"
+                                />
+                            </div>
+                        </div>
                     {% endif %}
+                </div>
 
+                <!-- column two: number of pixels input and button -->
+                <div class="column">
+                    <div class="input-row">
+                        <label for="search-field">Number of pixels:</label>
+                        <input id="search-field" type="text" name="pixel-amnt" placeholder="" autofocus required />
+                    </div>
+                    <button id="submit-button" type="submit">Convert</button>
+                </div>
+
+                <!-- column three: image output -->
+                <div class="imgcontainer">
+                    <div class="imgcolumn {% if not original_url %}noimage{% endif %}">
+                        <!-- display the image if a url exists, i.e. after conversion -->
+                        {% if img_url %}
+                        <img class="pixelated_img" src="{{ img_url }}" id="pixelated-img"/>
+                        {% else %}
+                        <img class="pixelated_img" src="{{ url_for('static', filename='hourglass.gif') }}" id="pixelated-img" style="display:none;"/>
+                        {% endif %}
+
+                    </div>
                 </div>
             </div>
-        </div>
         </form>
     </div>
 
