@@ -89,8 +89,8 @@ form.addEventListener('submit', function(event) {
         fileInput.click();
     } else {
         // loading screen
-        const image = document.getElementById("pixelated-img")
-        image.src = '/static/hourglass.gif'
-        image.style.display = 'block'
+        const image = document.getElementById("pixelated-img");
+        image.style.display = 'block';
+        image.src = '/static/hourglass.gif';
     }
 });

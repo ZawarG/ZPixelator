@@ -2,97 +2,104 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home Search</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Home Search</title>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
-    <div class="container">
-        <!-- title -->
-        <h1>Pixelator</h1>
+	<div class="container">
+		<!-- title -->
+		<h1>Pixelator</h1>
 
-        <!-- container to split page into three columns -->
-        <form action="/" method="POST" enctype="multipart/form-data">
-            <!-- apply default url value for image, gets submitted if nothing else is -->
-            <input type="hidden" id="original_url" name="original_url" value="{{ original_url }}">
+		<!-- container to split page into three columns -->
+		<form action="/" method="POST" enctype="multipart/form-data">
+			<!-- apply default url value for image, gets submitted if nothing else is -->
+			<input type="hidden" id="original_url" name="original_url" value="{{ original_url }}">
 
-            <div class="split">
+			<div class="split">
 
-                <!-- column one: image input -->
-                <div class="imgcontainer" id="moveto">
-                    <!-- if image is displayed -->
-                    {% if original_url %}
-                        <div class="imgcolumn" id="drag-drop-area">
-                            <img class="pixelated_img" src="{{ original_url }}" alt="Original Image" id="uploaded-img"/>
-                        </div>
-                        <div class="upload-controls">
-                            <label for="file-upload" class="custom-upload-button">Browse Files</label>
-                            <input 
-                                id="file-upload" 
-                                type="file" 
-                                name="image" 
-                                accept=".jpg, .jpeg, .png" 
-                                style="display:none;"
-                                onchange="handleFileUpload(this.files[0])"
-                            />
-                        </div>
-                    <!-- if image is not displayed -->
-                    {% else %}
-                        <div class="imgcolumn {% if not original_url %}noimage{% endif %}" id="drag-drop-area">
-                            <div class="placeholder-box" id="placeholder-box">
-                                <h2>Drag and Drop to Upload Image</h2>
-                                <p>OR</p>
-                            </div>
-                            <img class="pixelated_img" id="uploaded-img" style="display:none;"/>
-                            <div class="upload-controls.noimage" id="moving">
-                                <label for="file-upload" class="custom-upload-button">Browse Files</label>
-                                <input 
-                                    id="file-upload" 
-                                    type="file" 
-                                    name="image" 
-                                    accept=".jpg, .jpeg, .png" 
-                                    style="display:none;"
-                                    onchange="reformat();handleFileUpload(this.files[0])"
-                                />
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
+				<!-- column one: image input -->
+				<div class="imgcontainer" id="moveto">
+					<!-- if image is displayed -->
+					{% if original_url %}
+					<div class="imgcolumn" id="drag-drop-area">
+						<img class="pixelated_img" src="{{ original_url }}" alt="Original Image" id="uploaded-img" />
+					</div>
+					<div class="upload-controls">
+						<label for="file-upload" class="custom-upload-button">Browse Files</label>
+						<input 
+							id="file-upload" 
+							type="file" 
+							name="image" 
+							accept=".jpg, .jpeg, .png" 
+							style="display:none;"
+							onchange="handleFileUpload(this.files[0])" 
+						/>
+					</div>
+					<!-- if image is not displayed -->
+					{% else %}
+					<div class="imgcolumn {% if not original_url %}noimage{% endif %}" id="drag-drop-area">
+						<div class="placeholder-box" id="placeholder-box">
+							<h2>Drag and Drop to Upload Image</h2>
+							<p>OR</p>
+						</div>
+						<img class="pixelated_img" id="uploaded-img" style="display:none;" />
+						<div class="upload-controls.noimage" id="moving">
+							<label for="file-upload" class="custom-upload-button">Browse Files</label>
+							<input 
+								id="file-upload" 
+								type="file" 
+								name="image" 
+								accept=".jpg, .jpeg, .png" 
+								style="display:none;"
+								onchange="reformat();handleFileUpload(this.files[0])"
+							/>
+						</div>
+					</div>
+					{% endif %}
+				</div>
 
-                <!-- column two: number of pixels input and button -->
-                <div class="column">
-                    <div class="input-row">
-                        <label for="search-field">Number of pixels:</label>
-                        <input id="search-field" type="text" name="pixel-amnt" placeholder="" autofocus required />
-                    </div>
-                    <button id="submit-button" type="submit">Convert</button>
-                </div>
+				<!-- column two: number of pixels input and button -->
+				<div class="column">
+					<div class="input-row">
+						<label for="search-field">Number of pixels:</label>
+						<input 
+							id="search-field" 
+							type="text" 
+							name="pixel-amnt" 
+							placeholder="" 
+							autofocus 
+							required 
+						/>
+					</div>
+					<button id="submit-button" type="submit">Convert</button>
+				</div>
 
-                <!-- column three: image output -->
-                <div class="imgcontainer">
-                    <div class="imgcolumn {% if not original_url %}noimage{% endif %}">
-                        <!-- display the image if a url exists, i.e. after conversion -->
-                        {% if img_url %}
-                        <img class="pixelated_img" src="{{ img_url }}" id="pixelated-img"/>
-                        {% else %}
-                        <img class="pixelated_img" src="{{ url_for('static', filename='hourglass.gif') }}" id="pixelated-img" style="display:none;"/>
-                        {% endif %}
+				<!-- column three: image output -->
+				<div class="imgcontainer">
+					<div class="imgcolumn {% if not original_url %}noimage{% endif %}">
+						<!-- display the image if a url exists, i.e. after conversion -->
+						{% if img_url %}
+						<img class="pixelated_img" src="{{ img_url }}" id="pixelated-img" />
+						{% else %}
+						<img class="pixelated_img" src="{{ url_for('static', filename='hourglass.gif') }}" id="pixelated-img"
+							style="display:none;" />
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+	<!-- about section -->
+	<div id="about">
+		<a href="{{ url_for('about') }}">About this project :O</a>
+	</div>
 
-    <!-- about section -->
-    <div id="about">
-        <a href="{{ url_for('about') }}">About this project :O</a>
-    </div>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+	<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>
