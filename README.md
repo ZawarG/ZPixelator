@@ -28,13 +28,14 @@ The image is divided into a grid of smaller slices based on the user's desired n
 
 Each image slice is opened, and the average visible (non-transparent) color is computed. A new image filled with this average color replaces the original slice. This drastically reduces detail, producing a pixelated aesthetic.
 
-** 4. Canvas Generation (`createcanvas`)**
+**4. Canvas Generation (`createcanvas`)**
 
 A blank white canvas is created with dimensions based on the combined sizes of all the slices. This ensures the final composition reflects the original image size, even if slice sizes vary slightly due to rounding.
 
-** 5. Reconstruction (`pastetoimg`)**
+**5. Reconstruction (`pastetoimg`)**
 
 Each solid-colored slice is pasted back into its appropriate position on the canvas. The exact placement is calculated from the filenames (e.g., `3_2.png` → row 3, column 2) and their respective dimensions.
 
-** 6. Saving and Cleanup**
+**6. Saving and Cleanup**
+
 The final pixelated image is saved to the `/static/photos/` directory using the user-defined filename. Temporary files and the canvas image are deleted, and the `/temp` directory is removed, keeping the environment clean for future conversions.
