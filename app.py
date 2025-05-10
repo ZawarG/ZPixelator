@@ -1,6 +1,4 @@
 import os
-import shutil
-import tempfile
 from flask import Flask, render_template, request
 import converter
 from werkzeug.utils import secure_filename
@@ -54,10 +52,6 @@ def home():
             output_filename = 'pixelated_' + filename
             print(filename)
             converter.imgtopxl(original_path, int(pixel_amnt), output_filename)
-
-            # original_path = os.path.join('static','photos',filename)
-            # file.save(original_path)
-            # original_url = os.path.join('static','photos',filename)
 
         # if file and filename are empty, but a previous image exists
         elif (original_url != None):
