@@ -6,6 +6,8 @@ import math
 import pathlib
 
 
+cached_sizes = {}
+
 
 #clears any pictures still in the static folder
 def clear_prev_images():
@@ -53,7 +55,7 @@ def img_to_dir(imgpath):
 
 
 
-#slice the image into smaller parts
+#slice the image into smaller parts and then those smaller parts are processed so that the average colour of their pixels are calculated.
 def accurate_slice(imgpath, total_parts):
     image = Image.open(imgpath)
     width, height = image.size
@@ -78,11 +80,20 @@ def accurate_slice(imgpath, total_parts):
                 lower = height
 
             box = (left, upper, right, lower)
-            slice_img = image.crop(box)
             
+            #convert the cropped photo to RGBA and then find the average colour
+            slice = image.crop(box).convert("RGBA")
+            color  = AverageColor(slice)
+
+            solid = Image.new("RGB", slice.size, color)
             #saving with 1_1 type names so that theyre easier to put on a grid 
             filename = f"{row+1}_{col+1}.png"
-            slice_img.save(os.path.join(tmpdir_path, filename))
+    
+            #cache the size in a dictionary so its easier to look up later when calculating position
+            cached_sizes[filename] = slice.size
+
+            solid.save(os.path.join(tmpdir_path, filename))
+    
     return cols, rows
 
 
@@ -93,10 +104,9 @@ def imgsize(path):
 
 
 #finds the average colour inside a slice
-def AverageColor(path):
-    im = Image.open(path).convert('RGBA')
+def AverageColor(im):
     pixels = list(im.getdata())
-
+    
     #removes all transparent pixels from slice
     visible = [px for px in pixels if px[3] > 0]
     if not visible:
@@ -115,24 +125,6 @@ def AverageColor(path):
 def findpos(path):
     parts = Path(path).stem.split('_')
     return int(parts[0]) - 1, int(parts[1]) - 1
-
-
-
-#converts all the sliced images inside the temp directory into average colours
-def imgtosolid(path):
-    for subdir, _, files in os.walk(path):
-        for filename in files:
-            filepath = os.path.join(subdir, filename)
-            if filepath.endswith((".png", ".jpg")):
-                size = imgsize(filepath)
-                color = AverageColor(filepath)
-                new_img = Image.new("RGB", size, color)
-                name = Path(filename).name
-                temp_path = os.path.join(tmpdir_path, name)
-                os.remove(filepath)
-                new_img.save(temp_path)
-
-
 
 #creates a canvas for the sliced average colour images to be pasted onto
 def createcanvas(pixels, cols, rows):
@@ -171,8 +163,9 @@ def pastetoimg(canvaspath, name, dir):
                 pos = findpos(filepath)
                 
                 #below code is a bit strange looking but what it does is finds the sum of the width and coloum for all the images before that image (this is a bit redundant and may have a better solution)
-                x = sum(imgsize(os.path.join(dir, f"{pos[0]+1}_{i+1}.png"))[0] for i in range(pos[1]))
-                y = sum(imgsize(os.path.join(dir, f"{j+1}_{pos[1]+1}.png"))[1] for j in range(pos[0]))
+                x = sum(cached_sizes.get(f"{pos[0]+1}_{i+1}.png", (0, 0))[0] for i in range(pos[1]))
+                y = sum(cached_sizes.get(f"{j+1}_{pos[1]+1}.png", (0, 0))[1] for j in range(pos[0]))
+
                 bg.paste(fg, (x, y))
             
     save_path = str(pathlib.Path(__file__).parent.resolve() / 'static' / 'photos' / name)
@@ -201,8 +194,6 @@ def imgtopxl(imgpath, pixels, name):
         print(f"Error slicing: {e}")
         return
 
-    
-    imgtosolid(tmpdir_path)
     createcanvas(pixels, cols, rows)
     pastetoimg("canvas.jpg", name, tmpdir_path)
 
