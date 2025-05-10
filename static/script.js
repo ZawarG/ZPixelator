@@ -5,6 +5,10 @@ const submitButton = document.getElementById('submit-button');
 const form = document.querySelector('form');
 const originalUrlInput = document.getElementById('original_url');
 const placeholderBox = document.getElementById('placeholder-box');
+const textInput = document.getElementById('search-field');
+const convertLabel = document.querySelector('label[for="submit-button"]');
+let imageUploaded = false;
+let hasNumbInput = false;
 
 // when something is dragged over drag-drop-area
 dragDropArea.addEventListener('dragover', function (event) {
@@ -56,11 +60,13 @@ function reformat() {
         const target = document.getElementById('moveto');
         target.appendChild(element);
     }
-
 }
 
 // handle file upload and display preview of image
 function handleFileUpload(file) {
+    imageUploaded = true;
+    checkConditions(); // check if text has been entered
+
     const formData = new FormData();
     formData.append('image', file);
 
@@ -89,14 +95,53 @@ function handleFileUpload(file) {
 // trigger form submission only if file is selected
 form.addEventListener('submit', function(event) {
     // no file selected, prevent form submission and prompt user to select image
-    if (fileInput.files.length === 0 && originalUrlInput.value === "") {
-        event.preventDefault();
-        alert("Please select a file before submitting.");
-        fileInput.click();
-    } else {
+    // if (fileInput.files.length === 0 && originalUrlInput.value === "") {
+    if (hasNumbInput && imageUploaded) {
+    //     event.preventDefault();
+    //     alert("Please select a file before submitting.");
+    //     fileInput.click();
+    // } else {
         // loading screen
         const image = document.getElementById("pixelated-img");
         image.style.display = 'block';
         image.src = '/static/hourglass.gif';
     }
+    else {
+        event.preventDefault();
+        alert("Please select a file before submitting.");
+        fileInput.click();
+    }
+});
+
+// check if numbers have been inputted for pixel-amount
+function checkConditions() {
+    const value = textInput.value.trim()
+
+    const number = Number(value);
+    hasNumbInput = (Number.isFinite(number) && number > 0);
+    
+    // allow use of convert button
+    if (hasNumbInput) {
+        if (imageUploaded) {
+            convertLabel.classList.remove('disabled');
+        }
+    }
+    else {
+        convertLabel.classList.add('disabled');
+    }
+
+    // if (imageUploaded) {
+
+    //     if (hasNumbInput) {
+    //         const convertLabel = document.querySelector('label[for="submit-button"]')
+    //         convertLabel.classList.remove('disabled');
+    //     }
+    //     else {
+    //         convertLabel.classList.add('disabled');
+    //     }
+}
+
+// when text input is changed
+textInput.addEventListener('input', function () {
+    checkConditions();
 });

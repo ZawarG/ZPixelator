@@ -70,17 +70,18 @@
 							id="search-field" 
 							type="text" 
 							name="pixel-amnt" 
-							placeholder="" 
+							placeholder="e.g., 10"
 							autofocus 
 							required 
 						/>
 					</div>
-					<button id="submit-button" type="submit">Convert</button>
+					<label for="submit-button" class="custom-upload-button convert disabled">Convert</label>
+					<button id="submit-button" style="display:none;" type="submit"></button>
 				</div>
 
 				<!-- column three: image output -->
 				<div class="imgcontainer">
-					<div class="imgcolumn {% if not original_url %}noimage{% endif %}">
+					<div class="imgcolumn {% if not original_url %}noimage{% endif %}" style="background-color:inherit;">
 						<!-- display the image if a url exists, i.e. after conversion -->
 						{% if img_url %}
 						<img class="pixelated_img" src="{{ img_url }}" id="pixelated-img" />
