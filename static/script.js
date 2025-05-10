@@ -13,7 +13,6 @@ let hasNumbInput = false;
 if (originalUrlInput.value != "None") {
     imageUploaded = true;
 } 
-console.log(imageUploaded, "   ", originalUrlInput.value)
 
 // when something is dragged over drag-drop-area
 dragDropArea.addEventListener('dragover', function (event) {
@@ -54,16 +53,16 @@ dragDropArea.addEventListener('drop', function (event) {
 function reformat() {
     // remove black border
     dragDropArea.classList.remove('noimage');
-    // remove text (if it exists) saying drag and drop by clearing html content within placeholder div 
-    try {
-        const placeholderBox = document.getElementById('placeholder-box')
-        placeholderBox.innerHTML = ""
-    } catch {}
     // move upload button to underneath photo
     const element = document.getElementById('moving');
+    console.log(element);
     if (element) {
         const target = document.getElementById('moveto');
         target.appendChild(element);
+    }
+    // remove text (if it exists) saying drag and drop by clearing html content within placeholder div 
+    if (placeholderBox) {
+        placeholderBox.remove();
     }
 }
 
@@ -99,18 +98,13 @@ function handleFileUpload(file) {
 
 // trigger form submission only if file is selected
 form.addEventListener('submit', function(event) {
-    // no file selected, prevent form submission and prompt user to select image
-    // if (fileInput.files.length === 0 && originalUrlInput.value === "") {
     if (hasNumbInput && imageUploaded) {
-    //     event.preventDefault();
-    //     alert("Please select a file before submitting.");
-    //     fileInput.click();
-    // } else {
         // loading screen
         const image = document.getElementById("pixelated-img");
         image.style.display = 'block';
         image.src = '/static/hourglass.gif';
-    }
+        dragDropArea.classList.add('noimage');
+    } // no file selected, prevent form submission and prompt user to select image
     else {
         event.preventDefault();
         alert("Please select a file before submitting.");
