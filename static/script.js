@@ -10,6 +10,11 @@ const convertLabel = document.querySelector('label[for="submit-button"]');
 let imageUploaded = false;
 let hasNumbInput = false;
 
+if (originalUrlInput.value != "None") {
+    imageUploaded = true;
+} 
+console.log(imageUploaded, "   ", originalUrlInput.value)
+
 // when something is dragged over drag-drop-area
 dragDropArea.addEventListener('dragover', function (event) {
     // prevents browser from preventing drop
