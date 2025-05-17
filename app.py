@@ -38,19 +38,15 @@ def home():
                 original_path = os.path.join('static','photos',filename)
 
                 if os.path.exists(original_path):
-                    print(f"Image already exists: {original_path}")
+                    pass
                 else:
                     file.save(original_path)
                     original_url = os.path.join('static','photos',filename)
-                
-                print('SAVED-----------------------------------------------------------------------')
             except Exception as e:
-                print("ERROR saving file:", e)
                 return f"Error saving uploaded image: {e}", 500
             
             # pixelate initial image using converter, retrieving a url
             output_filename = 'pixelated_' + filename
-            print(filename)
             converter.imgtopxl(original_path, int(pixel_amnt), output_filename)
 
         # if file and filename are empty, but a previous image exists

@@ -19,7 +19,7 @@ def clear_prev_images():
             try:
                 os.remove(filepath)
             except Exception as e:
-                print(f"Failed to delete {filepath}: {e}")
+                return f"Failed to delete {filepath}: {e}"
 
 
 
@@ -51,7 +51,7 @@ def img_to_dir(imgpath):
         shutil.copy(imgpath, dirpath)
         return dirpath
     except Exception as e:
-        print(f"Error copying file: {e}")
+        return f"Error copying file: {e}"
 
 
 
@@ -183,16 +183,14 @@ def imgtopxl(imgpath, pixels, name):
         tmpdir_path = img_to_dir(imgpath)
         tmp_img_path = os.path.join(tmpdir_path, filename)
     except FileNotFoundError:
-        print('File not found.')
-        return
+        return 'File not found.'
 
     #slice the image and remove the copied file 
     try:
         cols, rows = accurate_slice(tmp_img_path, pixels)
         os.remove(tmp_img_path)
     except Exception as e:
-        print(f"Error slicing: {e}")
-        return
+        return f"Error slicing: {e}"
 
     createcanvas(pixels, cols, rows)
     pastetoimg("canvas.jpg", name, tmpdir_path)
@@ -201,7 +199,6 @@ def imgtopxl(imgpath, pixels, name):
     try:
         shutil.rmtree(tmpdir_path)
     except Exception as e:
-        print(f"Could not remove tmp directory: {e}")
+        return f"Could not remove tmp directory: {e}"
 
     os.remove("canvas.jpg")
-    print(f"Image saved to: static/photos/{name}")

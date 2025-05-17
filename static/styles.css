@@ -1,4 +1,5 @@
 /* Variables */
+
 :root {
     --searchBg: #fdf8ff;
     --fg: #000000;
@@ -10,6 +11,8 @@ html,
 body {
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
     background: var(--searchBg);
     font-family: var(--fontFamily);
 }
