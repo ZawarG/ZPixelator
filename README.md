@@ -2,8 +2,9 @@
 
 A clean and responsive web application that allows users to upload an image and pixelate it based on a specified number of pixels. At its core is Zpyxel, a custom image pixelation algorithm I developed when I was 14. The application uses Flask for the backend and HTML, CSS, and JavaScript for the frontend.
 
-![zpixelator-demo](https://github.com/user-attachments/assets/c5a257c8-c4fb-40cd-a195-c831e54bb88d)
-
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/c5a257c8-c4fb-40cd-a195-c831e54bb88d">
+</div>
 
 1. **Clone the repository** `git clone https://github.com/ZawarG/ZPixelator`
 
